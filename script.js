@@ -1,34 +1,37 @@
-let testing = require("./scriptHelper.js");
-
 // Write your JavaScript code here!
-
-
-
 window.addEventListener("load", function() {
-    document.getElementById('faultyItems').style.visibility = "hidden";
-    
-    let form = document.querySelector("testForm");
-    form.addEventListener("submit", function(event) {
-       let pilot = document.querySelector("input[name=pilotName]").textContent;
-       let copilot = document.querySelector("input[name=copilotName]").textContent;
-       let fuelLevel = document.querySelector("input[name=fuelLevel]").textContent;
-       let cargoMass = document.querySelector("input[name=cargoMass]").textContent;
-       let list = document.querySelector("input[name=faultyItems]");
 
-       if (pilot.value === "" || copilot.value === "" || fuelLevel.value === "" || cargoMass.value === "") {
-        alert("All fields are required!");
-        event.preventDefault();
-       }
-       testing.formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel);
-    });
+let list = document.getElementById("faultyItems");
+list.style.visibility = "hidden"
+let form = document.querySelector ("form");
 
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+            let pilotInput = document.querySelector("input[name=pilotName]");
+            let pilot = pilotInput.value;
 
-    let listedPlanetsResponse = testing.myFetch();
+            let copilotInput = document.querySelector("input[name=copilotName]");
+            let copilot = copilotInput.value;
+
+            let fuelInput = document.querySelector("input[name=fuelLevel]");
+            let fuelLevel = Number(fuelInput.value);
+
+            let cargoInput = document.querySelector("input[name=cargoMass]");
+            let cargoLevel = Number(cargoInput.value);
+
+            formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel);
+        })
+
+    let planetList;
+    let listedPlanetsResponse = myFetch();
     listedPlanetsResponse.then(function (result) {
-        console.log(listedPlanets);
+        planetList = result;
+        console.log(planetList);
+    }).then(function (){
     // Below this comment call the appropriate helper functions to pick a planet fom the list of planets and add that information to your destination.
-        let planet = testing.pickPlanet(listedPlanetsResponse);
-        testing.addDestinationInfo(document, planet.name, planet.diameter, planet.star, planet.distance, planet.moons, planet.image);
+        console.log(planetList);
+        let planet = pickPlanet(planetList);
+        addDestinationInfo(document, planet.name, planet.diameter, planet.star, planet.distance, planet.moons, planet.image);
     })
     
  }); 
